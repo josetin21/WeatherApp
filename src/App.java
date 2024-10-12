@@ -1,11 +1,17 @@
+import org.json.simple.JSONObject;
+
 import javax.imageio.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 public class App  extends JFrame {
+    private JSONObject weatherData;
+
     public App(){
         super("Weather App");
 
@@ -24,12 +30,6 @@ public class App  extends JFrame {
         searchTextField.setBounds(15,15,351,45);
         searchTextField.setFont(new Font("Dialog",Font.PLAIN,24));
         add(searchTextField);
-
-        //search button
-        JButton searchButton = new JButton(loadImage("src/Assets/search.png"));
-        searchButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        searchButton.setBounds(375,13,45,45);
-        add(searchButton);
 
         //weather condition image
         JLabel weatherConditionImage = new JLabel(loadImage("src/Assets/cloudy.png"));
@@ -71,6 +71,50 @@ public class App  extends JFrame {
         windSpeedText.setBounds(310,500,85,55);
         windSpeedText.setFont(new Font("Dialog",Font.PLAIN,16));
         add(windSpeedText);
+
+        //search button
+        JButton searchButton = new JButton(loadImage("src/Assets/search.png"));
+        searchButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        searchButton.setBounds(375,13,45,45);
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String userInput = searchTextField.getText();
+
+                if(userInput.replaceAll("\\s", " ").length() <=0 ){
+                    return;
+                }
+                weatherData = AppApi.getWeatherData(userInput);
+
+
+                String weatherCondition = (String) weatherData.get("weathercondition");
+                switch (weatherCondition){
+                    case "Clear":
+                        weatherConditionImage.setIcon(loadImage("src/Assets/clear.png"));
+                        break;
+                    case "Cloudy":
+                        weatherConditionImage.setIcon(loadImage("src/Assets/cloudy.png"));
+                        break;
+                    case "Rain":
+                        weatherConditionImage.setIcon(loadImage("src/Assets/rain.png"));
+                        break;
+                    case "Snow":
+                        weatherConditionImage.setIcon(loadImage("src/Assets/snow.png"));
+                        break;
+                }
+                double temperature = (double) weatherData.get("temperature");
+                temperatureText.setText(temperature + " C");
+
+                weatherConditionDesc.setText(weatherCondition);
+
+                long humidity = (long) weatherData.get("humidity");
+                humidityText.setText("<html><b>Humidity</b>"+humidity+"%<html>");
+
+                double windspeeed = (double) weatherData.get("windspeed");
+                windSpeedText.setText("<html><b>Windspeed</b>"+windspeeed+"km/h<html>");
+            }
+        });
+        add(searchButton);
     }
     //used to create images in our gui
     private ImageIcon loadImage(String resourcePath){
