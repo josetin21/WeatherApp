@@ -73,7 +73,7 @@ public class App  extends JFrame {
         add(windSpeedText);
 
         //search button
-        JButton searchButton = new JButton(loadImage("src/Assets/search.png"));
+        JButton searchButton = new JButton(loadImage("src/Assets/search_1.png"));
         searchButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         searchButton.setBounds(375,13,45,45);
         searchButton.addActionListener(new ActionListener() {
