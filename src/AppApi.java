@@ -48,20 +48,20 @@ public class AppApi {
             JSONArray temperatureDate = (JSONArray) hourly.get("temperature_2m");
             double temperature = (double) temperatureDate.get(index);
 
-            JSONArray weatherCode = (JSONArray) hourly.get("weathercode");
+            JSONArray weatherCode = (JSONArray) hourly.get("weather_code");
             String weatherCondition = convertWeatherCode((long) weatherCode.get(index));
 
-            JSONArray relativeHumidity = (JSONArray) hourly.get("relativehumidity_2m");
+            JSONArray relativeHumidity = (JSONArray) hourly.get("relative_humidity_2m");
             long humidity = (long) relativeHumidity.get(index);
 
-            JSONArray windSpeed = (JSONArray) hourly.get("windspeed_10m");
+            JSONArray windSpeed = (JSONArray) hourly.get("wind_speed_10m");
             double windspeed = (double) windSpeed.get(index);
 
             JSONObject weatherData = new JSONObject();
             weatherData.put("temperature", temperature);
             weatherData.put("weather_condition", weatherCondition);
             weatherData.put("humidity", humidity);
-            weatherData.put("windspeed", windspeed);
+            weatherData.put("wind_speed", windspeed);
 
             return weatherData;
         }catch (Exception e){
@@ -138,10 +138,10 @@ public class AppApi {
     }
 
     private static String convertWeatherCode(long weatherCode){
-        String weatherCondition = " ";
+        String weatherCondition = "";
         if(weatherCode == 0L){
             weatherCondition = "Clear";
-        } else if (weatherCode == 3L && weatherCode >0L) {
+        } else if (weatherCode > 0L && weatherCode <= 3L) {
             weatherCondition = "Cloudy";
         } else if ((weatherCode >= 51L && weatherCode <=67L)
             ||(weatherCode >= 80L && weatherCode <= 99L)) {

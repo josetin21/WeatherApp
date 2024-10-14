@@ -87,7 +87,7 @@ public class App  extends JFrame {
                 weatherData = AppApi.getWeatherData(userInput);
 
 
-                String weatherCondition = (String) weatherData.get("weathercondition");
+                String weatherCondition = (String) weatherData.get("weather_condition");
                 switch (weatherCondition){
                     case "Clear":
                         weatherConditionImage.setIcon(loadImage("src/Assets/clear.png"));
@@ -108,10 +108,10 @@ public class App  extends JFrame {
                 weatherConditionDesc.setText(weatherCondition);
 
                 long humidity = (long) weatherData.get("humidity");
-                humidityText.setText("<html><b>Humidity</b>"+humidity+"%<html>");
+                humidityText.setText("<html><b>Humidity </b>"+humidity+"%<html>");
 
-                double windspeeed = (double) weatherData.get("windspeed");
-                windSpeedText.setText("<html><b>Windspeed</b>"+windspeeed+"km/h<html>");
+                double windspeed = (double) weatherData.get("wind_speed");
+                windSpeedText.setText("<html><b>Windspeed </b>"+windspeed+"km/h<html>");
             }
         });
         add(searchButton);
